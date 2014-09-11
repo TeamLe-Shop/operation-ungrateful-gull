@@ -124,20 +124,3 @@ class ZordzmanServer(socketserver.TCPServer):
         # I won't pedantically check for __call__ on `handler` or that it
         # has the right signature because that is lame as balls
         self.type_handlers[type_] = handler
-
-
-if __name__ == "__main__":
-
-    def authentication_handler(handler, entity):
-        # Admittedly there's some terminology overloading going on here where
-        # I'm using "handler" to describe two related but different things.
-        if entity["password"] != "nogirlsallowed":
-            handler.send("auth_response",
-                         {"success": False, "reason": "Wrong password"})
-        else:
-            handler.send("auth_response", {"success": True})
-
-
-    server = ZordzmanServer(("0.0.0.0", 9001))
-    server.register_handler("auth_request", authentication_handler)
-    server.serve_forever()
